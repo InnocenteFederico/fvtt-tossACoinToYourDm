@@ -10,5 +10,14 @@
   "version": "0.0.1",
   "compatibility": {
     "minimum": "10"
-  }
+  },
+  "languages": [
+    {
+      "lang": "it",
+      "name": "Italiano",
+      "path": "lang/it.json"
+    }
+  ],
+  "manifest": "",
+  "download": ""
 }
