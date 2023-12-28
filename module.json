@@ -9,15 +9,24 @@
   ],
   "version": "0.0.1",
   "compatibility": {
-    "minimum": "10"
+    "minimum": "10",
+    "verified": "10"
   },
   "languages": [
+    {
+      "lang": "en",
+      "name": "English",
+      "path": "lang/en.json"
+    },
     {
       "lang": "it",
       "name": "Italiano",
       "path": "lang/it.json"
     }
   ],
+  "scripts": ["scripts/cashDesk.js"],
+  "styles": ["styles/cashDesk.css"],
+
   "manifest": "",
   "download": ""
 }

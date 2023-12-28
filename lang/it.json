@@ -1,0 +1,26 @@
+{
+  "CASH-DESK": {
+    "coins": {
+      "platinum": {
+        "short": "MP",
+        "long": "Monete di platino"
+      },
+      "gold": {
+        "short": "MO",
+        "long": "Monete d'oro"
+      },
+      "electrum": {
+        "short": "ME",
+        "long": "Monete d'electrum"
+      },
+      "silver": {
+        "short": "MA",
+        "long": "Monete d'argento"
+      },
+      "copper": {
+        "short": "MB",
+        "long": "Monete di bronzo"
+      }
+    }
+  }
+}

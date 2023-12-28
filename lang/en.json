@@ -1,0 +1,26 @@
+{
+  "CASH-DESK": {
+    "coins": {
+      "platinum": {
+        "short": "PP",
+        "long": "Platinum pieces"
+      },
+      "gold": {
+        "short": "GP",
+        "long": "Golden pieces"
+      },
+      "electrum": {
+        "short": "EP",
+        "long": "Electrum pieces"
+      },
+      "silver": {
+        "short": "SP",
+        "long": "Silver pieces"
+      },
+      "copper": {
+        "short": "CP",
+        "long": "Copper pieces"
+      }
+    }
+  }
+}
