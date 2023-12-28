@@ -1,27 +1,54 @@
 class CashDesk {
-  static ID = "cash-desk";
-  static TEMPLATE = "modules/drop-a-coin/templates/cash-desk.hbs";
+  //static ID = "drop-a-coin";
+  //static TEMPLATE = "modules/drop-a-coin/templates/cashDesk.hbs";
 
-  static pay(cp, sp, ep, gp, pp) {
-    const actorCurrency = game.user?.character.system.currency;
-    if (!actorCurrency) return false;
-    const check = [cp, sp, ep, gp, pp];
-    const wallet = [
-      actorCurrency.cp,
-      actorCurrency.sp,
-      actorCurrency.ep,
-      actorCurrency.gp,
-      actorCurrency.pp,
-    ];
-    for (const i in check) {
-      if (check[i] > wallet[i]) return false;
+  currentCheck = {
+    pp: 0,
+    gp: 3,
+    ep: 0,
+    sp: 0,
+    cp: 0,
+  };
+
+  gain() {
+    const wallet = game.user?.character.system.currency;
+    wallet.cp += this.currentCheck.cp;
+    wallet.sp += this.currentCheck.sp;
+    wallet.ep += this.currentCheck.ep;
+    wallet.gp += this.currentCheck.gp;
+    wallet.pp += this.currentCheck.pp;
+  }
+
+  pay() {
+    const wallet = game.user?.character.system.currency;
+    for (const value of Object.keys(this.currentCheck)) {
+      if (
+        wallet[value] == undefined ||
+        this.currentCheck[value] > wallet[value]
+      )
+        return;
     }
-    actorCurrency.cp -= cp;
-    actorCurrency.sp -= sp;
-    actorCurrency.ep -= ep;
-    actorCurrency.gp -= gp;
-    actorCurrency.pp -= pp;
-    return true;
+    wallet.cp -= this.currentCheck.cp;
+    wallet.sp -= this.currentCheck.sp;
+    wallet.ep -= this.currentCheck.ep;
+    wallet.gp -= this.currentCheck.gp;
+    wallet.pp -= this.currentCheck.pp;
+  }
+
+  updateCheck(newCheck) {
+    for (value in this.currentCheck) {
+      this.currentCheck[value] += newCheck[value];
+    }
+  }
+
+  resetCheck() {
+    this.currentCheck = {
+      pp: 0,
+      gp: 0,
+      ep: 0,
+      sp: 0,
+      cp: 0,
+    };
   }
 
   /**
@@ -33,21 +60,67 @@ class CashDesk {
   static log(force, ...args) {
     const shouldLog =
       force ||
-      game.modules.get("_dev-mode")?.api?.getPackageDebugValue(this.ID);
+      game.modules.get("_dev-mode")?.api?.getPackageDebugValue("drop-a-coin");
 
     if (shouldLog) {
-      console.log(this.ID, "|", ...args);
+      console.log("drop-a-coin", "|", ...args);
     }
   }
 }
 
-Hooks.on("renderSidebarTab", (app, html, data) => {
+Hooks.on("renderSidebarTab", async (app, html, data) => {
+  const cashDesk = new CashDesk();
   if (app.tabName !== "chat") return;
   const chat_log = html.find("#chat-log");
 
-  renderTemplate("modules/drop-a-coin/templates/cashDesk.hbs").then((c) =>
-    chat_log.after(c)
+  const content = await renderTemplate(
+    "modules/drop-a-coin/templates/cashDesk.hbs"
   );
+  let $content = $(content);
+  chat_log.after($content);
+  // Left click on the coin button: add a coin
+  $content.find(".cash-desk-money-button").on("click", (event) => {
+    event.preventDefault();
+    CashDesk.log(true, "aggiungi moneta");
+    //CONFIG.DICETRAY.updateChatDice(dataset, "add", html);
+  });
+  // Right click on the coin button: remove a coin
+  $content.find(".cash-desk-money-button").on("contextmenu", (event) => {
+    event.preventDefault();
+    // Lancio l'evento di update
+    CashDesk.log(true, "rimuovi moneta");
+    //CONFIG.DICETRAY.updateChatDice(dataset, "add", html);
+  });
+  // Reset click: reset the check
+  $content.find(".cash-desk-reset").on("click", (event) => {
+    CashDesk.log(false, "Reset check");
+    event.preventDefault();
+    cashDesk.resetCheck();
+    const check = $content.find(".cash-desk-input");
+    for (elem of check) {
+      elem.value = "";
+    }
+  });
+  $content.find(".cash-desk-gain").on("click", (event) => {
+    CashDesk.log(false, "Add gain");
+    event.preventDefault();
+    cashDesk.gain();
+    cashDesk.resetCheck();
+    const check = $content.find(".cash-desk-input");
+    for (elem of check) {
+      elem.value = "";
+    }
+  });
+  $content.find(".cash-desk-pay").on("click", (event) => {
+    CashDesk.log(false, "Remove payment");
+    event.preventDefault();
+    cashDesk.pay();
+    cashDesk.resetCheck();
+    const check = $content.find(".cash-desk-input");
+    for (elem of check) {
+      elem.value = "";
+    }
+  });
 });
 
 /**
