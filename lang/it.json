@@ -21,6 +21,10 @@
         "short": "MB",
         "long": "Monete di bronzo"
       }
+    },
+    "messages": {
+      "cantAfford": "Non puoi permetterti di pagare questa cifra.",
+      "gain": "{NAME_PLACEHOLDER} ha guadagnato: {PP_PLACEHOLDER} monete di platino\n, {GP_PLACEHOLDER} monete d'oro, {EP_PLACEHOLDER} monete d'electrum, {SP_PLACEHOLDER} monete d'argento, {CP_PLACEHOLDER} monete di bronzo"
     }
   }
 }
