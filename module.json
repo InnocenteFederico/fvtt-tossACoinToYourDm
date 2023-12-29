@@ -7,7 +7,7 @@
       "name": "Federico Innocente"
     }
   ],
-  "version": "0.0.1",
+  "version": "1.0.0.",
   "compatibility": {
     "verified": "10"
   },
@@ -28,6 +28,6 @@
   "styles": ["styles/cashDesk.css"],
 
   "url": "https://github.com/InnocenteFederico/fvtt-dropACoinToYourDm",
-  "manifest": "",
-  "download": ""
+  "manifest": "https://github.com/InnocenteFederico/fvtt-dropACoinToYourDm/releases/download/1.0.0/module.json",
+  "download": "https://github.com/InnocenteFederico/fvtt-dropACoinToYourDm/releases/download/1.0.0/release_1_0_0.zip"
 }
