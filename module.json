@@ -27,6 +27,7 @@
   "scripts": ["scripts/cashDesk.js"],
   "styles": ["styles/cashDesk.css"],
 
+  "url": "https://github.com/InnocenteFederico/fvtt-dropACoinToYourDm",
   "manifest": "",
   "download": ""
 }
