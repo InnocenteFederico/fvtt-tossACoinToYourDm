@@ -1,7 +1,7 @@
 {
   "id": "drop-a-coin",
-  "title": "Drop a Coin",
-  "description": "A module to easily manage PCs personal finance",
+  "title": "Drop A Coin To Your DM",
+  "description": "A module to fastly add or pay money for DnD5e",
   "authors": [
     {
       "name": "Federico Innocente"
@@ -9,9 +9,9 @@
   ],
   "version": "0.0.1",
   "compatibility": {
-    "minimum": "10",
     "verified": "10"
   },
+  "system": ["dnd5e"],
   "languages": [
     {
       "lang": "en",

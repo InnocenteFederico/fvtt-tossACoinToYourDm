@@ -23,8 +23,9 @@
       }
     },
     "messages": {
-      "cantAfford": "You can't afford to pay",
-      "gain": "{NAME_PLACEHOLDER} gained: {PP_PLACEHOLDER} PP, {GP_PLACEHOLDER} GP, {EP_PLACEHOLDER} EP, {SP_PLACEHOLDER} SP, {CP_PLACEHOLDER} CP"
+      "cantAfford": "You can't afford to pay:",
+      "gain": "{NAME_PLACEHOLDER} gained:",
+      "pay": "{NAME_PLACEHOLDER} payed:"
     }
   }
 }

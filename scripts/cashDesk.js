@@ -45,6 +45,7 @@ class CashDesk {
     wallet.ep += this.currentCheck.ep;
     wallet.gp += this.currentCheck.gp;
     wallet.pp += this.currentCheck.pp;
+    this.printCheckout("gain");
     this.resetCheck();
   }
 
@@ -54,61 +55,82 @@ class CashDesk {
       if (
         wallet[value] == undefined ||
         this.currentCheck[value] > wallet[value]
-      )
+      ) {
+        this.printCheckout("error");
         return;
+      }
     }
     wallet.cp -= this.currentCheck.cp;
     wallet.sp -= this.currentCheck.sp;
     wallet.ep -= this.currentCheck.ep;
     wallet.gp -= this.currentCheck.gp;
     wallet.pp -= this.currentCheck.pp;
+    this.printCheckout("pay");
     this.resetCheck();
   }
 
-  printCheckout(operation, error) {
+  printCheckout(operation) {
     let message = {
       content: "",
+      speaker: ChatMessage.getSpeaker(),
     };
-    if (error) {
-      message.content = game.i18n.localize("CASH-DESK.messages.cantAfford");
-    } else {
-      switch (operation) {
-        case "gain":
-          message.content = game.i18n.localize("CASH-DESK.messages.gain");
-          break;
-      }
-      message.content = message.content.replace(
-        "{NAME_PLACEHOLDER}",
-        game.user?.character.name
-      );
-      message.content = message.content.replace(
-        "{PP_PLACEHOLDER}",
-        "" + this.currentCheck.pp
-      );
-      message.content = message.content.replace(
-        "{GP_PLACEHOLDER}",
-        "" + this.currentCheck.gp
-      );
-      message.content = message.content.replace(
-        "{EP_PLACEHOLDER}",
-        "" + this.currentCheck.ep
-      );
-      message.content = message.content.replace(
-        "{SP_PLACEHOLDER}",
-        "" + this.currentCheck.sp
-      );
-      message.content = message.content.replace(
-        "{CP_PLACEHOLDER}",
-        "" + this.currentCheck.cp
-      );
+    switch (operation) {
+      case "gain":
+        message.content = game.i18n.localize("CASH-DESK.messages.gain");
+        break;
+      case "pay":
+        message.content = game.i18n.localize("CASH-DESK.messages.pay");
+        break;
+      case "error":
+        message.content = game.i18n.localize("CASH-DESK.messages.cantAfford");
+        break;
     }
+    message.content = message.content.replace(
+      "{NAME_PLACEHOLDER}",
+      game.user?.character.name
+    );
+    message.content +=
+      this.currentCheck.pp > 0
+        ? "<br>- " +
+          this.currentCheck.pp +
+          " " +
+          game.i18n.localize("CASH-DESK.coins.platinum.fullName")
+        : "";
+    message.content +=
+      this.currentCheck.gp > 0
+        ? "<br>- " +
+          this.currentCheck.gp +
+          " " +
+          game.i18n.localize("CASH-DESK.coins.gold.fullName")
+        : "";
+    message.content +=
+      this.currentCheck.ep > 0
+        ? "<br>- " +
+          this.currentCheck.ep +
+          " " +
+          game.i18n.localize("CASH-DESK.coins.electrum.fullName")
+        : "";
+    message.content +=
+      this.currentCheck.sp > 0
+        ? "<br>- " +
+          this.currentCheck.sp +
+          " " +
+          game.i18n.localize("CASH-DESK.coins.silver.fullName")
+        : "";
+    message.content +=
+      this.currentCheck.cp > 0
+        ? "<br>- " +
+          this.currentCheck.cp +
+          " " +
+          game.i18n.localize("CASH-DESK.coins.platinum.fullName")
+        : "";
     ChatMessage.create(message);
   }
 }
 
 Hooks.on("renderSidebarTab", async (app, html, data) => {
+  if (app.tabName !== "chat" || !game.user?.character) return;
   const cashDesk = new CashDesk();
-  if (app.tabName !== "chat") return;
   const chat_log = html.find("#chat-log");
 
   const content = await renderTemplate(
@@ -140,13 +162,11 @@ Hooks.on("renderSidebarTab", async (app, html, data) => {
   // Add the check to the wallet
   $content.find(".cash-desk-gain").on("click", (event) => {
     event.preventDefault();
-    cashDesk.printCheckout("gain");
     cashDesk.gain();
   });
   // Subtract the check from the wallet
   $content.find(".cash-desk-pay").on("click", (event) => {
     event.preventDefault();
-    cashDesk.printCheckout("gain");
     cashDesk.pay();
   });
   // Internally update the check
